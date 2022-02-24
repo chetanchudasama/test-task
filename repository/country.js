@@ -4,7 +4,6 @@ const { states } = require("../models/state");
 const findCountryDetail = async () => {
   try {
     let CountryData = await Country.find();
-    console.log("CountryData -", CountryData);
     return CountryData;
   } catch (error) {
     throw error;
