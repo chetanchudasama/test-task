@@ -1,14 +1,14 @@
-const { Category } = require('../models/category')
+const { Category } = require("../models/category");
 
 const findCategoryDetail = async () => {
   try {
-    let CategoryData = await Category.find()
-    return CategoryData
+    let CategoryData = await Category.find();
+    return CategoryData;
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 module.exports = {
   findCategoryDetail,
-}
+};

@@ -21,7 +21,6 @@ const getComments = async (req, res) => {
       .status(httpStatusCode[response.serverResponse.statusCode])
       .send(response);
   } catch (error) {
-    console.log("error", error);
     return res
       .status(httpStatusCode[error.serverResponse.statusCode])
       .send(error);

@@ -18,7 +18,6 @@ const categoryList = async (reqHeaders) => {
       },
     };
   } catch (error) {
-    console.log("eror", error);
     throw {
       serverResponse: {
         isError: true,

@@ -37,9 +37,7 @@ const addComment = async (reqHeaders, reqBody) => {
 const getComments = async (reqHeaders, reqParams) => {
   let lang = reqHeaders.language ? reqHeaders.language : "EN";
   try {
-    const commentDetails = await findCommentsDetail({
-      productId: reqParams.id,
-    });
+    const commentDetails = await findCommentsDetail({ postId: reqParams.id });
     if (commentDetails) {
       return {
         serverResponse: {
@@ -73,11 +71,11 @@ const getComments = async (reqHeaders, reqParams) => {
 
 const addCommentJson = async (reqBody) => {
   const commentJson = {};
-  if (reqBody.comments) {
-    commentJson["comments"] = reqBody.comments;
+  if (reqBody.comment) {
+    commentJson["comment"] = reqBody.comment;
   }
-  if (reqBody.productId) {
-    commentJson["productId"] = reqBody.productId;
+  if (reqBody.postId) {
+    commentJson["postId"] = reqBody.postId;
   }
   return commentJson;
 };

@@ -1,34 +1,13 @@
 const httpStatusCode = require("http-status");
-const productServices = require("../services/product");
+const postServices = require("../services/post");
 const formidable = require("formidable");
 
-const addProduct = async (req, res) => {
+const addPost = async (req, res) => {
   try {
     const form = new formidable.IncomingForm();
     const files = await parseForm(form, req);
 
-    const response = await productServices.addProduct(
-      req.headers,
-      req.body,
-      files
-    );
-    return res
-      .status(httpStatusCode[response.serverResponse.statusCode])
-      .send(response);
-  } catch (error) {
-    console.log("error", error);
-    return res
-      .status(httpStatusCode[error.serverResponse.statusCode])
-      .send(error);
-  }
-};
-
-const getProductById = async (req, res) => {
-  try {
-    const response = await productServices.getProductById(
-      req.headers,
-      req.params
-    );
+    const response = await postServices.addPost(req.headers, req.body, files);
     return res
       .status(httpStatusCode[response.serverResponse.statusCode])
       .send(response);
@@ -39,9 +18,22 @@ const getProductById = async (req, res) => {
   }
 };
 
-const getProductList = async (req, res) => {
+const getPostById = async (req, res) => {
   try {
-    const response = await productServices.getProductList(req.headers);
+    const response = await postServices.getPostById(req.headers, req.params);
+    return res
+      .status(httpStatusCode[response.serverResponse.statusCode])
+      .send(response);
+  } catch (error) {
+    return res
+      .status(httpStatusCode[error.serverResponse.statusCode])
+      .send(error);
+  }
+};
+
+const getPostList = async (req, res) => {
+  try {
+    const response = await postServices.getPostList(req.headers);
     return res
       .status(httpStatusCode[response.serverResponse.statusCode])
       .send(response);
@@ -68,9 +60,6 @@ function parseForm(form, req) {
         if (err) {
           return reject(err);
         }
-        // if (files.user_image === undefined || !files.hasOwnProperty('user_image')) {
-        //     return reject(new Error('No form contents'))
-        // }
         return resolve(files);
       });
     } catch (error) {
@@ -80,7 +69,7 @@ function parseForm(form, req) {
 }
 
 module.exports = {
-  addProduct,
-  getProductById,
-  getProductList,
+  addPost,
+  getPostById,
+  getPostList,
 };

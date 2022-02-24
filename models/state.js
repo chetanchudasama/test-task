@@ -1,22 +1,25 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const countrySchema = new mongoose.Schema({
-  _id: {
-    type: Number
+const countrySchema = new mongoose.Schema(
+  {
+    _id: {
+      type: Number,
+    },
+    name: {
+      type: String,
+    },
+    country: {
+      type: Number,
+      ref: "country",
+    },
   },
-  name: {
-    type: String
-  },
-  country: {
-    type: Number,
-    ref: 'country'
+  {
+    collection: "state",
   }
-}, {
-    collection: "state"
-})
+);
 
-const states = mongoose.model('state', countrySchema)
+const states = mongoose.model("state", countrySchema);
 
 module.exports = {
   states,
-}
+};
