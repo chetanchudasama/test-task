@@ -19,17 +19,7 @@ const getSingleCommentsDetail = async (query) => {
   }
 };
 
-const findCommentsDetail = async (query) => {
-  try {
-    let CommentsData = await Comments.find(query);
-    return CommentsData;
-  } catch (error) {
-    throw error;
-  }
-};
-
 module.exports = {
   insertCommentsData,
   getSingleCommentsDetail,
-  findCommentsDetail,
 };

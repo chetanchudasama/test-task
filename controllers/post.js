@@ -12,9 +12,7 @@ const addPost = async (req, res) => {
       .status(httpStatusCode[response.serverResponse.statusCode])
       .send(response);
   } catch (error) {
-    return res
-      .status(httpStatusCode[error.serverResponse.statusCode])
-      .send(error);
+    return "error";
   }
 };
 
@@ -49,12 +47,12 @@ const getPostList = async (req, res) => {
 function parseForm(form, req) {
   return new Promise((resolve, reject) => {
     try {
-      if (
-        !req.hasOwnProperty("headers") ||
-        req["headers"]["content-length"] === 0
-      ) {
-        return reject(new Error("No form contents")); //check it postman in form-data pass any field or not...
-      }
+      // if (
+      //   !req.hasOwnProperty("headers") ||
+      //   req["headers"]["content-length"] === 0
+      // ) {
+      //   return reject(new Error("No form contents")); //check it postman in form-data pass any field or not...
+      // }
       form.parse(req, function (err, fields, files) {
         req.body = fields; //in services pass req.body here pass fields
         if (err) {

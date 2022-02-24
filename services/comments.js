@@ -3,10 +3,13 @@ const dbCons = require("../constant/db-constant");
 const dbOpration = require("../constant/db-operation-constant");
 const {
   insertCommentsData,
-  findCommentsDetail,
+  getSingleCommentsDetail,
 } = require("../repository/comments");
 const { getQuery } = require("../repository/db-operation");
 const mongoose = require("mongoose");
+const {
+  ConversationList,
+} = require("twilio/lib/rest/conversations/v1/conversation");
 
 const addComment = async (reqHeaders, reqBody) => {
   let lang = reqHeaders.language ? reqHeaders.language : "EN";
@@ -37,7 +40,9 @@ const addComment = async (reqHeaders, reqBody) => {
 const getComments = async (reqHeaders, reqParams) => {
   let lang = reqHeaders.language ? reqHeaders.language : "EN";
   try {
-    const commentDetails = await findCommentsDetail({ postId: reqParams.id });
+    const commentDetails = await getSingleCommentsDetail({
+      postId: reqParams.id,
+    });
     if (commentDetails) {
       return {
         serverResponse: {

@@ -2,19 +2,19 @@ const _msg = require("../config/message");
 const dbCons = require("../constant/db-constant");
 const dbOpration = require("../constant/db-operation-constant");
 const {
-  insertProductData,
-  getSingleProductDetail,
-  findProductDetail,
-} = require("../repository/product");
+  insertPostData,
+  getSinglePostDetail,
+  findPostDetail,
+} = require("../repository/post");
 const { getQuery } = require("../repository/db-operation");
 const { imageUpdaloadServices } = require("./cloudinary");
 const mongoose = require("mongoose");
 
-const addProduct = async (reqHeaders, reqBody, files) => {
+const addPost = async (reqHeaders, reqBody, files) => {
   let lang = reqHeaders.language ? reqHeaders.language : "EN";
   try {
-    const productJson = await addProductJson(reqBody, files);
-    const productData = await insertProductData(productJson);
+    const postJson = await addPostJson(reqBody, files);
+    const postData = await insertPostData(postJson);
     return {
       serverResponse: {
         isError: false,
@@ -22,7 +22,7 @@ const addProduct = async (reqHeaders, reqBody, files) => {
         statusCode: "OK",
       },
       result: {
-        data: productData,
+        data: postData,
       },
     };
   } catch (error) {
@@ -36,29 +36,27 @@ const addProduct = async (reqHeaders, reqBody, files) => {
   }
 };
 
-const getProductById = async (reqParams) => {
+const getPostById = async (reqHeaders, reqParams) => {
+  let lang = reqHeaders.language ? reqHeaders.language : "EN";
   try {
-    const productQuery = getQuery(
-      dbCons.FIELD__ID,
-      mongoose.Types.ObjectId(reqParams[dbCons.FIELD_ID])
-    );
-    const productDetails = await getSingleProductDetail(productQuery);
-    if (productDetails) {
+    const postQuery = getQuery("_id", mongoose.Types.ObjectId(reqParams.id));
+    const postDetails = await getSinglePostDetail(postQuery);
+    if (postDetails) {
       return {
         serverResponse: {
           isError: false,
-          message: _msg[200]["EN"],
+          message: _msg[200][lang],
           statusCode: "OK",
         },
         result: {
-          data: productDetails,
+          data: postDetails,
         },
       };
     } else {
       return {
         serverResponse: {
           isError: true,
-          message: _msg[1002]["EN"],
+          message: _msg[404][lang],
           statusCode: "OK",
         },
       };
@@ -74,10 +72,10 @@ const getProductById = async (reqParams) => {
   }
 };
 
-const getProductList = async (reqHeaders) => {
+const getPostList = async (reqHeaders) => {
   let lang = reqHeaders.language ? reqHeaders.language : "EN";
   try {
-    const productData = await findProductDetail({});
+    const postData = await findPostDetail({});
     return {
       serverResponse: {
         isError: false,
@@ -85,7 +83,7 @@ const getProductList = async (reqHeaders) => {
         statusCode: "OK",
       },
       result: {
-        data: productData,
+        data: postData,
       },
     };
   } catch (error) {
@@ -99,50 +97,47 @@ const getProductList = async (reqHeaders) => {
   }
 };
 
-const addProductJson = async (reqBody, files) => {
-  const productJson = {};
+const addPostJson = async (reqBody, files) => {
+  const postJson = {};
   if (reqBody.category) {
-    productJson["category"] = reqBody.category;
+    postJson["category"] = reqBody.category;
   }
   if (reqBody.country) {
-    productJson["country"] = reqBody.country;
+    postJson["country"] = reqBody.country;
   }
   if (reqBody.title) {
-    productJson["title"] = reqBody.title;
+    postJson["title"] = reqBody.title;
   }
   if (reqBody.description) {
-    productJson["description"] = reqBody.description;
+    postJson["description"] = reqBody.description;
   }
   if (reqBody.price) {
-    productJson["price"] = reqBody.price;
+    postJson["price"] = reqBody.price;
   }
   if (reqBody.name) {
-    productJson["name"] = reqBody.name;
+    postJson["name"] = reqBody.name;
   }
-  if (reqBody.mobile) {
-    productJson["mobile"] = reqBody.mobile;
+  if (reqBody.mobileNumber) {
+    postJson["mobileNumber"] = reqBody.mobileNumber;
   }
   if (reqBody.email) {
-    productJson["email"] = reqBody.email;
+    postJson["email"] = reqBody.email;
   }
-  if (files.images) {
-    const imagePhotos = await imageUpdaloadServices(files.images);
-    productJson["images"] = imagePhotos;
+  if (files.imageUrl) {
+    const imagePhotos = await imageUpdaloadServices(files.imageUrl);
+    postJson["imageUrl"] = imagePhotos;
   }
   if (reqBody.state) {
-    productJson["state"] = reqBody.state;
+    postJson["state"] = reqBody.state;
   }
   if (reqBody.isPublic) {
-    productJson["isPublic"] = reqBody.isPublic;
+    postJson["isPublic"] = reqBody.isPublic;
   }
-  if (reqBody.comments) {
-    productJson["comments"] = reqBody.comments;
-  }
-  return productJson;
+  return postJson;
 };
 
 module.exports = {
-  addProduct,
-  getProductById,
-  getProductList,
+  addPost,
+  getPostById,
+  getPostList,
 };
